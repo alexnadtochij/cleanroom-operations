@@ -2167,12 +2167,12 @@
     function saveRoomLayout() {
       const layout = {};
       resizableRooms.forEach(room => { layout[room.dataset.roomKey] = readRoomGeometry(room); });
-      try { localStorage.setItem("clearline-room-layout", JSON.stringify(layout)); } catch (e) {}
+      try { localStorage.setItem("clearline-room-layout-v2", JSON.stringify(layout)); } catch (e) {}
     }
 
     function loadRoomLayout() {
       try {
-        const layout = JSON.parse(localStorage.getItem("clearline-room-layout"));
+        const layout = JSON.parse(localStorage.getItem("clearline-room-layout-v2"));
         if (!layout) return;
         resizableRooms.forEach(room => {
           if (layout[room.dataset.roomKey]) applyRoomGeometry(room, layout[room.dataset.roomKey]);
@@ -2543,7 +2543,7 @@
     });
 
     document.getElementById("resetRoomsBtn").addEventListener("click", () => {
-      try { localStorage.removeItem("clearline-room-layout"); } catch (e) {}
+      try { localStorage.removeItem("clearline-room-layout-v2"); } catch (e) {}
       resizableRooms.forEach(room => {
         room.style.removeProperty("left");
         room.style.removeProperty("top");
