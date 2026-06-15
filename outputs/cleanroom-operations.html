@@ -562,26 +562,26 @@
     .utility .zone-badge { background: #617e90; }
 
     .production {
-      left: 24%;
+      left: 28%;
       top: 2%;
-      width: 74%;
-      height: 72%;
-      border-radius: 0 14px 14px 0;
+      width: 70%;
+      height: 74%;
+      border-radius: 0 14px 0 0;
     }
     .bioreactor-room {
       left: 2%;
       top: 2%;
-      width: 22%;
+      width: 26%;
       height: 94%;
       border-radius: 14px 0 0 14px;
       background: rgba(234, 243, 241, .94);
       border-right: 0;
     }
     .bioreactor-wing {
-      left: 24%;
-      top: 74%;
-      width: 74%;
-      height: 22%;
+      left: 28%;
+      top: 76%;
+      width: 70%;
+      height: 20%;
       border-top: 2px solid #aab7b0;
       border-left: 0;
       border-radius: 0 0 14px 0;
@@ -589,6 +589,10 @@
       z-index: 1;
     }
     .bioreactor-room .zone-badge { background: #437e75; }
+    .plan-layer[data-plan="main"] {
+      left: -7%;
+      right: -7%;
+    }
     .airlock { left: 51%; top: 2%; width: 47%; height: 94%; border-radius: 0 10px 10px 0; background: rgba(239, 246, 245, .9); }
     .wash { left: 2%; top: 2%; width: 49%; height: 94%; border-radius: 10px 0 0 10px; background: rgba(247, 244, 237, .92); }
     .material { left: 8%; top: 8%; width: 84%; height: 82%; border-radius: 14px; background: rgba(245, 241, 248, .9); }
@@ -608,6 +612,69 @@
     .door.d2 { left: 50%; top: 68%; transform: rotate(90deg); }
     .door.d3 { left: 48%; top: 89%; }
     .door.d4 { left: 48%; top: 89%; }
+
+    .shared-airlock {
+      position: absolute;
+      left: 44.5%;
+      width: 13%;
+      height: 17%;
+      z-index: 3;
+      display: grid;
+      place-items: center;
+      border: 2px solid #78958d;
+      border-radius: 8px;
+      background: rgba(222, 239, 235, .97);
+      box-shadow: 0 5px 14px rgba(38,55,50,.1);
+      color: #285d55;
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .08em;
+      text-align: center;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+    .exit-airlock { top: 4%; }
+    .entry-airlock { top: 79%; }
+    .layout-editing .exit-airlock {
+      pointer-events: auto;
+      cursor: move;
+      outline: 2px dashed rgba(18,107,96,.55);
+      outline-offset: 3px;
+    }
+    .airlock-door {
+      position: absolute;
+      top: calc(50% - 13px);
+      width: 7px;
+      height: 26px;
+      border: 2px solid #78958d;
+      background: var(--paper);
+    }
+    .airlock-door.west { left: -5px; border-right: 0; }
+    .airlock-door.east { right: -5px; border-left: 0; }
+
+    .personnel-flow-map {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      pointer-events: none;
+    }
+    .personnel-flow-map .flow-line {
+      fill: none;
+      stroke: rgba(18,107,96,.58);
+      stroke-width: .7;
+      stroke-dasharray: 2 1.4;
+      vector-effect: non-scaling-stroke;
+    }
+    .personnel-flow-map text {
+      fill: #397067;
+      font-size: 2.1px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
 
     .flow-arrow {
       position: absolute;
@@ -844,6 +911,63 @@
       border: 2px solid currentColor;
       background: transparent;
     }
+
+    /* User-selectable floorplan symbols */
+    .equipment[data-symbol] .machine-art {
+      box-shadow: none !important;
+      background: transparent !important;
+    }
+    .equipment[data-symbol="machine"] .machine-art {
+      width: 58% !important; height: 55% !important; border: 2px solid currentColor !important; border-radius: 5px !important;
+    }
+    .equipment[data-symbol="vessel"] .machine-art {
+      width: 58% !important; height: 66% !important; border: 2px solid currentColor !important; border-radius: 50% 50% 10px 10px !important;
+    }
+    .equipment[data-symbol="skid"] .machine-art {
+      width: 72% !important; height: 54% !important; border: 2px solid currentColor !important; border-radius: 3px !important;
+      background: linear-gradient(90deg, transparent 47%, currentColor 48% 52%, transparent 53%) !important;
+    }
+    .equipment[data-symbol="tote"] .machine-art {
+      width: 62% !important; height: 58% !important; border: 2px solid currentColor !important; border-radius: 4px !important;
+      background: linear-gradient(45deg, transparent 47%, currentColor 48% 52%, transparent 53%), linear-gradient(-45deg, transparent 47%, currentColor 48% 52%, transparent 53%) !important;
+    }
+    .equipment[data-symbol="filter"] .machine-art {
+      width: 68% !important; height: 58% !important; border: 0 !important; border-radius: 0 !important;
+      background: repeating-linear-gradient(90deg, currentColor 0 3px, transparent 3px 15px) !important;
+    }
+    .equipment[data-symbol="panel"] .machine-art {
+      width: 66% !important; height: 62% !important; border: 2px solid currentColor !important; border-radius: 3px !important;
+      background: radial-gradient(circle at 25% 25%, currentColor 0 2px, transparent 3px), radial-gradient(circle at 50% 25%, currentColor 0 2px, transparent 3px), radial-gradient(circle at 75% 25%, currentColor 0 2px, transparent 3px) !important;
+    }
+    .equipment[data-symbol="scale"] .machine-art {
+      width: 68% !important; height: 42% !important; margin-top: 12px; border: 2px solid currentColor !important; border-radius: 5px !important;
+    }
+    .equipment[data-symbol="bag"] .machine-art {
+      width: 55% !important; height: 60% !important; border: 2px solid currentColor !important; border-radius: 50% 50% 7px 7px !important;
+    }
+    .equipment[data-symbol="column"] .machine-art {
+      width: 66% !important; height: 66% !important; border: 3px solid currentColor !important; border-radius: 50% !important;
+      box-shadow: inset 0 0 0 5px transparent, inset 0 0 0 7px currentColor !important;
+    }
+    .equipment[data-symbol] .machine-art::before,
+    .equipment[data-symbol] .machine-art::after { display: none !important; }
+    .equipment-editing .equipment { cursor: move; touch-action: none; outline: 1px dashed rgba(18,107,96,.5); outline-offset: 2px; }
+    .equipment.dragging { z-index: 30; cursor: grabbing; opacity: .86; }
+    .equipment-resize-handle {
+      position: absolute;
+      right: -7px;
+      bottom: -7px;
+      z-index: 35;
+      display: none;
+      width: 14px;
+      height: 14px;
+      border: 2px solid white;
+      border-radius: 4px;
+      background: var(--teal);
+      box-shadow: 0 1px 4px rgba(0,0,0,.25);
+      cursor: nwse-resize;
+    }
+    .equipment-editing .equipment-resize-handle { display: block; }
 
     .equipment .status-dot {
       position: absolute;
@@ -1107,6 +1231,9 @@
     .eq-14 { left: 5%; top: 20%; width: 72px; height: 72px; }
     .eq-15 { left: 14%; top: 20%; width: 72px; height: 72px; }
     .eq-16 { left: 9.5%; top: 44%; width: 72px; height: 72px; }
+    .eq-17 { left: 31%; top: 79%; width: 72px; height: 72px; }
+    .eq-18 { left: 43%; top: 79%; width: 72px; height: 72px; }
+    .eq-19 { left: 37%; top: 24%; width: 76px; height: 76px; border-radius: 50%; }
     .eq-6 { left: 34%; top: 40%; width: 130px; height: 78px; }
     .eq-7 { left: 42%; top: 40%; width: 130px; height: 78px; }
     .eq-8 { left: 58%; top: 40%; width: 116px; height: 78px; }
@@ -1259,6 +1386,31 @@
     .check input:checked + .check-box { border-color: var(--teal); background: var(--teal); }
     .check input:checked + .check-box::after { content: "✓"; }
     .check small { color: var(--muted); font-size: 9px; }
+    .process-step-form { display: grid; grid-template-columns: 1fr auto; gap: 7px; margin-bottom: 10px; }
+    .process-step-form input {
+      min-width: 0;
+      padding: 9px 10px;
+      border: 1px solid #ccd5cf;
+      border-radius: 8px;
+      outline: none;
+      font: inherit;
+    }
+    .process-step-form input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(18,107,96,.1); }
+    .process-step-list { display: grid; gap: 7px; }
+    .process-step {
+      display: grid;
+      grid-template-columns: 22px 1fr auto;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: rgba(255,255,255,.78);
+    }
+    .process-step.completed .process-step-name { color: var(--muted); text-decoration: line-through; }
+    .process-step-number { display: grid; place-items: center; width: 21px; height: 21px; border-radius: 50%; background: var(--teal-pale); color: var(--teal); font-size: 9px; font-weight: 900; }
+    .process-step-actions { display: flex; gap: 4px; }
+    .process-step-actions button { padding: 5px 7px; border: 1px solid #ccd5cf; border-radius: 6px; background: white; color: var(--ink); font-size: 9px; cursor: pointer; }
 
     textarea {
       width: 100%;
@@ -1421,9 +1573,9 @@
         <div class="eyebrow nav-title">Six cleanroom zones</div>
         <div class="room-nav">
           <button class="active" data-room="production"><span class="room-swatch"></span>Harvest Hold<span class="zone-number">1419 · 32 EQ</span></button>
-          <button data-room="bioreactor"><span class="room-swatch"></span>Bioreactor zone<span class="zone-number">3 EQ</span></button>
+          <button data-room="bioreactor"><span class="room-swatch"></span>Bioreactor zone<span class="zone-number">5 EQ</span></button>
           <button data-room="airlock"><span class="room-swatch"></span>Zone 1206<span class="zone-number">2 EQ</span></button>
-          <button data-room="wash"><span class="room-swatch"></span>Zone 1202<span class="zone-number">3 EQ</span></button>
+          <button data-room="wash"><span class="room-swatch"></span>Zone 1202<span class="zone-number">4 EQ</span></button>
           <button data-room="material"><span class="room-swatch"></span>Zone 1502<span class="zone-number">1 EQ</span></button>
           <button data-room="utility"><span class="room-swatch"></span>Zone 1507<span class="zone-number">2 EQ</span></button>
         </div>
@@ -1455,6 +1607,8 @@
           </button>
           <button class="tool-btn" id="editLayoutBtn">Edit rooms</button>
           <button class="tool-btn" id="resetRoomsBtn">Reset rooms</button>
+          <button class="tool-btn" id="editEquipmentBtn">Move equipment</button>
+          <button class="tool-btn" id="resetEquipmentBtn">Reset equipment</button>
           <button class="tool-btn" id="zoomOut" aria-label="Zoom out">−</button>
           <button class="tool-btn" id="zoomIn" aria-label="Zoom in">+</button>
         </div>
@@ -1462,10 +1616,29 @@
         <div class="floor-shell">
           <div class="floorplan" id="floorplan">
             <div class="plan-layer hidden" data-plan="main">
-              <div class="room airlock resizable-room" data-room-key="room-1206" data-room-shape="airlock"><span class="room-label"><span class="zone-badge">1206</span>Personnel airlock</span></div>
-              <div class="room wash resizable-room" data-room-key="room-1202" data-room-shape="wash"><span class="room-label"><span class="zone-badge">1202</span>Process equipment room</span></div>
-              <div class="door d1"></div><div class="door d2"></div>
-              <div class="flow-arrow flow-1">Personnel flow</div><div class="flow-arrow flow-2">Material flow</div>
+              <div class="room airlock resizable-room" data-room-key="room-1206-wide" data-room-shape="airlock"><span class="room-label"><span class="zone-badge">1206</span>Personnel airlock</span></div>
+              <div class="room wash resizable-room" data-room-key="room-1202-wide" data-room-shape="wash"><span class="room-label"><span class="zone-badge">1202</span>Process equipment room</span></div>
+              <div class="shared-airlock exit-airlock resizable-room" data-room-key="exit-airlock" aria-label="Exit airlock">
+                <span class="airlock-door west"></span>
+                Exit<br>Airlock
+                <span class="airlock-door east"></span>
+              </div>
+              <div class="shared-airlock entry-airlock" aria-label="Entry airlock">
+                <span class="airlock-door west"></span>
+                Entry<br>Airlock
+                <span class="airlock-door east"></span>
+              </div>
+              <svg class="personnel-flow-map" viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="Personnel flow from entry airlock through both rooms to exit airlock">
+                <defs>
+                  <marker id="flowArrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L7,3.5 L0,7 Z" fill="#397067"></path>
+                  </marker>
+                </defs>
+                <path class="flow-line" d="M51 79 L51 72 L28 72 L28 61" marker-end="url(#flowArrow)"></path>
+                <path class="flow-line" d="M51 79 L51 72 L74 72 L74 61" marker-end="url(#flowArrow)"></path>
+                <path class="flow-line" d="M28 38 L28 26 L51 26 L51 21" marker-end="url(#flowArrow)"></path>
+                <path class="flow-line" d="M74 38 L74 26 L51 26 L51 21" marker-end="url(#flowArrow)"></path>
+              </svg>
               <button class="equipment eq-9 idle" data-id="ufdf-2601" data-room="airlock">
                 <span class="machine-art"></span><span class="status-dot"></span><span class="equipment-label">UF/DF-2601</span>
               </button>
@@ -1480,6 +1653,9 @@
               </button>
               <button class="equipment eq-12 idle" data-id="tot-2710" data-room="wash">
                 <span class="machine-art"></span><span class="status-dot"></span><span class="equipment-label">TOT-2710</span>
+              </button>
+              <button class="equipment eq-19 idle" data-id="column-1202" data-room="wash">
+                <span class="machine-art"></span><span class="status-dot"></span><span class="equipment-label">COL-1202-01</span>
               </button>
             </div>
 
@@ -1498,6 +1674,12 @@
               </button>
               <button class="equipment eq-16 idle draggable" data-id="br-03" data-room="bioreactor">
                 <span class="machine-art"></span><span class="status-dot"></span><span class="equipment-label">BR-03</span>
+              </button>
+              <button class="equipment eq-17 idle draggable" data-id="br-04" data-room="bioreactor">
+                <span class="machine-art"></span><span class="status-dot"></span><span class="equipment-label">BR-04</span>
+              </button>
+              <button class="equipment eq-18 idle draggable" data-id="br-05" data-room="bioreactor">
+                <span class="machine-art"></span><span class="status-dot"></span><span class="equipment-label">BR-05</span>
               </button>
             </div>
 
@@ -1543,6 +1725,8 @@
           </div>
           <div class="status-row">
             <div><label>Equipment status</label><select class="status-select" id="statusSelect"><option value="idle">Idle</option><option value="bag-installed">Bag installed</option><option value="in-use">In use</option><option value="warning">Attention</option><option value="blocked">Blocked</option><option value="offline">Offline</option></select></div>
+            <div><label>Floorplan symbol</label><select class="status-select" id="symbolSelect"><option value="machine">Standard machine</option><option value="vessel">Vessel / bioreactor</option><option value="skid">Process skid</option><option value="tote">Tote / container</option><option value="filter">Filter / UF-DF</option><option value="panel">Control panel</option><option value="scale">Scale</option><option value="bag">Bag station</option><option value="column">Chromatography column</option></select></div>
+            <div id="equipmentIdEditor"><label>Equipment / column ID</label><div class="assignment-actions"><input class="metric-input" id="equipmentIdInput" placeholder="Enter equipment ID"><button class="assignment-btn" id="renameEquipment">Rename</button></div></div>
           </div>
         </div>
 
@@ -1559,6 +1743,15 @@
         <div class="section" id="readinessSection">
           <div class="section-title"><b id="checklistTitle">Compounding readiness</b><span id="checkCount">3 / 4</span></div>
           <div class="checklist" id="checklist"></div>
+        </div>
+
+        <div class="section" id="processStepsSection">
+          <div class="section-title"><b>Process steps</b><span id="processStepCount">0 / 0</span></div>
+          <div class="process-step-form">
+            <input id="processStepInput" placeholder="Enter a process step">
+            <button class="primary-btn" id="addProcessStep">Add step</button>
+          </div>
+          <div class="process-step-list" id="processStepList"></div>
         </div>
 
         <div class="section">
@@ -1701,6 +1894,14 @@
         checklist: [["Station line clearance verified", true], ["Tote identity scanned", false], ["Grounding connection verified", false], ["Transfer path confirmed", false]],
         events: [["Status set to Idle", "System · 03:43"], ["Station inspection completed", "A. Nguyen · 03:39"]]
       },
+      "column-1202": {
+        id: "COL-1202-01", name: "Chromatography column", room: "Zone 1202", status: "idle", disposition: "Released", symbol: "column",
+        metricLabels: ["Column pressure", "Bed height", "Column volume", "Resin lot"],
+        metrics: ["0.00 bar", "-- cm", "-- L", "Not assigned"],
+        checklist: [["Column identity confirmed", false], ["Resin lot verified", false], ["Packing record available", false], ["Column released for use", false]],
+        processSteps: [["Verify column identity", false], ["Connect column", false], ["Flush preservation solution", false], ["Equilibrate column", false], ["Run chromatography step", false], ["Store or unpack column", false]],
+        events: [["Column added to Zone 1202", "System · just now"], ["Status set to Idle", "System · just now"]]
+      },
       "cip-401": {
         id: "CIP-401", name: "CIP station", room: "Process utilities", status: "warning", disposition: "Not applicable",
         metrics: ["72.1 C", "3.28 bar", "Due soon", "6 days"],
@@ -1739,6 +1940,20 @@
         metrics: ["37.0 C", "0 rpm", "7.00", "0%"],
         checklist: [["Vessel line clearance verified", true], ["Probe calibration confirmed", false], ["Gas path configured", false], ["Batch recipe loaded", false]],
         events: [["Status set to Idle", "System · 03:32"], ["Equipment released", "QA · 02:12"]]
+      },
+      "br-04": {
+        id: "BR-04", name: "Bioreactor 04", room: "Bioreactor room", status: "idle", disposition: "Released",
+        metricLabels: ["Temperature", "Agitation", "pH", "DO"],
+        metrics: ["37.0 C", "0 rpm", "7.00", "0%"],
+        checklist: [["Vessel line clearance verified", false], ["Probe calibration confirmed", false], ["Gas path configured", false], ["Batch recipe loaded", false]],
+        events: [["Equipment added to floorplan", "System · just now"], ["Status set to Idle", "System · just now"]]
+      },
+      "br-05": {
+        id: "BR-05", name: "Bioreactor 05", room: "Bioreactor room", status: "idle", disposition: "Released",
+        metricLabels: ["Temperature", "Agitation", "pH", "DO"],
+        metrics: ["37.0 C", "0 rpm", "7.00", "0%"],
+        checklist: [["Vessel line clearance verified", false], ["Probe calibration confirmed", false], ["Gas path configured", false], ["Batch recipe loaded", false]],
+        events: [["Equipment added to floorplan", "System · just now"], ["Status set to Idle", "System · just now"]]
       }
     };
 
@@ -1792,7 +2007,7 @@
       button.dataset.room = "production";
       button.style.left = `${isExtensionStation ? 61 : inLeftBank ? 30 + column * 8 : 72 + column * 8}%`;
       const rowOffset = !inLeftBank && !isExtensionStation && row >= 4 ? 7 : 0;
-      button.style.top = `${isExtensionStation ? 17 + (station - 31) * 8.4 : 17 + row * 8.4 + rowOffset}%`;
+      button.style.top = `${isExtensionStation ? 2 + (station - 31) * 8.4 : 2 + row * 8.4 + rowOffset}%`;
       button.setAttribute("aria-label", `Bag station ${displayLabel}`);
       button.innerHTML = `<span class="machine-art"></span><span class="status-dot"></span><span class="station-number">${displayLabel}</span>`;
       bagContainer.appendChild(button);
@@ -1808,7 +2023,7 @@
     const operationLabels = {
       tak079: "TAK-079", lana: "LANA", vpriv: "VPRIV", repaf: "RepAF", rhasac: "Rhasa C"
     };
-    const room1202Equipment = ["chrm-2610", "skid-2510", "tot-2710"];
+    const room1202Equipment = ["chrm-2610", "skid-2510", "tot-2710", "column-1202"];
     const room1202ValidatedOperations = ["tak079", "lana", "vpriv"];
     const room1206Equipment = ["ufdf-2601", "chrm-2620"];
     const room1206ValidatedOperations = ["vpriv", "repaf"];
@@ -1821,6 +2036,7 @@
 
     const equipmentEls = [...document.querySelectorAll(".equipment")];
     const statusSelect = document.getElementById("statusSelect");
+    const symbolSelect = document.getElementById("symbolSelect");
     const phaseSelect = document.getElementById("phaseSelect");
     const phaseSelect2 = document.getElementById("phaseSelect2");
     const assignmentOperation = document.getElementById("assignmentOperation");
@@ -1936,6 +2152,17 @@
       });
     }
 
+    function refreshEquipmentLabels() {
+      Object.keys(assets).filter(id => !id.startsWith("hh-bs-")).forEach(id => {
+        const mapLabel = document.querySelector(`.equipment[data-id="${id}"] .equipment-label`);
+        if (mapLabel) mapLabel.textContent = assets[id].id;
+        const assignmentOption = equipmentAssignmentAsset.querySelector(`option[value="${id}"]`);
+        if (assignmentOption) assignmentOption.textContent = `${assets[id].id} · ${assets[id].name}`;
+        const auditOption = document.getElementById("auditEquipmentFilter").querySelector(`option[value="${id}"]`);
+        if (auditOption) auditOption.textContent = `${assets[id].id} · ${assets[id].name}`;
+      });
+    }
+
     function loadAssignments() {
       try {
         const saved = JSON.parse(localStorage.getItem("clearline-station-assignments"));
@@ -1965,6 +2192,33 @@
       statusSelect.innerHTML = options.map(([value, label]) => `<option value="${value}">${label}</option>`).join("");
     }
 
+    function defaultSymbol(assetId) {
+      if (assetId.startsWith("hh-bs-")) return "bag";
+      if (assetId.startsWith("br-") || assetId.startsWith("chrm-") || assetId === "cip-401") return "vessel";
+      if (assetId === "skid-2510") return "skid";
+      if (assetId === "tot-2710") return "tote";
+      if (assetId === "ufdf-2601") return "filter";
+      if (assetId === "column-1202") return "column";
+      if (assetId === "ms-101") return "scale";
+      if (assetId === "pw-402") return "panel";
+      return "machine";
+    }
+
+    function supportsProcessSteps(assetId) {
+      return !assetId.startsWith("hh-bs-") && assetId !== "ms-101" && assetId !== "pw-402";
+    }
+
+    function defaultProcessSteps(assetId) {
+      if (assetId === "ufdf-2601") return [["Install membrane cassette", false], ["Prime flow path", false], ["Run concentration step", false], ["Run diafiltration step", false], ["Recover product", false]];
+      if (assetId === "skid-2510") return [["Configure flow path", false], ["Perform pre-use leak test", false], ["Prime skid", false], ["Run transfer", false], ["Drain and secure system", false]];
+      if (assetId.startsWith("chrm-")) return [["Install column", false], ["Prime buffer paths", false], ["Equilibrate column", false], ["Load product", false], ["Wash and elute", false]];
+      if (assetId === "column-1202") return [["Verify column identity", false], ["Connect column", false], ["Flush preservation solution", false], ["Equilibrate column", false], ["Run chromatography step", false], ["Store or unpack column", false]];
+      if (assetId === "tot-2710") return [["Verify tote identity", false], ["Connect transfer line", false], ["Tare tote", false], ["Receive product", false], ["Disconnect and secure", false]];
+      if (assetId.startsWith("br-")) return [["Prepare vessel", false], ["Calibrate probes", false], ["Charge media", false], ["Inoculate vessel", false], ["Run culture phase", false], ["Harvest batch", false]];
+      if (assetId === "cip-401") return [["Select cleaning circuit", false], ["Pre-rinse", false], ["Caustic wash", false], ["Final rinse", false], ["Release cleaning cycle", false]];
+      return [["Prepare equipment", false], ["Run operation", false], ["Complete post-use activities", false]];
+    }
+
     function renderAsset(id) {
       selectedId = id;
       const asset = assets[id];
@@ -1974,6 +2228,8 @@
       document.getElementById("assetRoom").textContent = asset.room;
       setStatusOptions(id);
       statusSelect.value = asset.status;
+      symbolSelect.value = asset.symbol || defaultSymbol(id);
+      document.getElementById("equipmentIdInput").value = asset.id;
       const metricLabels = asset.metricLabels || ["Temperature", "Pressure", "Calibration", "Next PM"];
       metricLabels.forEach((label, i) => document.getElementById(`metricLabel${i + 1}`).textContent = label);
       ["metric1","metric2","metric3","metric4"].forEach((metric, i) => document.getElementById(metric).value = asset.metrics[i]);
@@ -1981,6 +2237,9 @@
       document.getElementById("readinessSection").style.display = assignments.length ? "" : "none";
       document.getElementById("checklistTitle").textContent = `${assignments.map(operation => operationLabels[operation]).join(" / ")} readiness`;
       renderChecklist();
+      document.getElementById("processStepsSection").style.display = supportsProcessSteps(id) ? "" : "none";
+      if (supportsProcessSteps(id) && !Array.isArray(asset.processSteps)) asset.processSteps = defaultProcessSteps(id);
+      renderProcessSteps();
       renderTimeline();
       document.getElementById("noteInput").value = "";
     }
@@ -2008,6 +2267,44 @@
       }));
     }
 
+    function renderProcessSteps() {
+      const asset = assets[selectedId];
+      const section = document.getElementById("processStepsSection");
+      if (!supportsProcessSteps(selectedId)) {
+        section.style.display = "none";
+        return;
+      }
+      section.style.display = "";
+      if (!Array.isArray(asset.processSteps)) asset.processSteps = defaultProcessSteps(selectedId);
+      const completed = asset.processSteps.filter(step => step[1]).length;
+      document.getElementById("processStepCount").textContent = `${completed} / ${asset.processSteps.length}`;
+      document.getElementById("processStepList").innerHTML = asset.processSteps.map((step, index) => `
+        <div class="process-step ${step[1] ? "completed" : ""}">
+          <span class="process-step-number">${index + 1}</span>
+          <span class="process-step-name">${step[0]}</span>
+          <span class="process-step-actions">
+            <button data-step-toggle="${index}">${step[1] ? "Reopen" : "Complete"}</button>
+            <button data-step-remove="${index}">Remove</button>
+          </span>
+        </div>`).join("");
+      document.querySelectorAll("[data-step-toggle]").forEach(button => button.addEventListener("click", () => {
+        const index = Number(button.dataset.stepToggle);
+        asset.processSteps[index][1] = !asset.processSteps[index][1];
+        asset.events.unshift([`Process step ${asset.processSteps[index][1] ? "completed" : "reopened"}: ${asset.processSteps[index][0]}`, `A. Nguyen · ${timeNow()}`]);
+        persist();
+        renderProcessSteps();
+        renderTimeline();
+      }));
+      document.querySelectorAll("[data-step-remove]").forEach(button => button.addEventListener("click", () => {
+        const index = Number(button.dataset.stepRemove);
+        const removed = asset.processSteps.splice(index, 1)[0];
+        asset.events.unshift([`Process step removed: ${removed[0]}`, `A. Nguyen · ${timeNow()} · Configuration update`]);
+        persist();
+        renderProcessSteps();
+        renderTimeline();
+      }));
+    }
+
     function renderTimeline() {
       const events = assets[selectedId].events.slice(0, 5);
       document.getElementById("timeline").innerHTML = events.map(event => `
@@ -2017,6 +2314,7 @@
     function updateMap() {
       equipmentEls.forEach(el => {
         const asset = assets[el.dataset.id];
+        el.dataset.symbol = asset.symbol || defaultSymbol(el.dataset.id);
         const layoutClass = el.classList.contains("bag-station")
           ? "bag-station"
           : (el.className.match(/eq-\d+/) || [""])[0];
@@ -2111,29 +2409,42 @@
       window.toastTimer = setTimeout(() => el.classList.remove("show"), 2200);
     }
 
-    function loadBioreactorPositions() {
+    function loadEquipmentPositions() {
       try {
-        const saved = JSON.parse(localStorage.getItem("clearline-bioreactor-positions"));
+        const saved = JSON.parse(localStorage.getItem("clearline-equipment-positions"))
+          || JSON.parse(localStorage.getItem("clearline-bioreactor-positions"));
         if (!saved) return;
-        delete saved["br-04"];
         Object.entries(saved).forEach(([id, position]) => {
           const element = document.querySelector(`.equipment[data-id="${id}"]`);
           if (!element || !position) return;
           element.style.left = `${position.left}%`;
           element.style.top = `${position.top}%`;
+          if (position.width) element.style.width = `${position.width}%`;
+          if (position.height) element.style.height = `${position.height}%`;
         });
       } catch (e) {}
     }
 
-    function saveBioreactorPositions() {
-      const positions = {};
-      document.querySelectorAll('.equipment[data-id^="br-"]').forEach(element => {
+    function saveEquipmentPositions(changedElement) {
+      let positions = {};
+      try {
+        positions = JSON.parse(localStorage.getItem("clearline-equipment-positions")) || {};
+      } catch (e) {}
+      const elements = changedElement
+        ? [changedElement]
+        : equipmentEls.filter(element => !element.closest(".plan-layer").classList.contains("hidden"));
+      elements.forEach(element => {
+        const planRect = element.closest(".plan-layer").getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+        if (!planRect.width || !planRect.height) return;
         positions[element.dataset.id] = {
-          left: parseFloat(element.style.left || getComputedStyle(element).left),
-          top: parseFloat(element.style.top || getComputedStyle(element).top)
+          left: (elementRect.left - planRect.left) / planRect.width * 100,
+          top: (elementRect.top - planRect.top) / planRect.height * 100,
+          width: elementRect.width / planRect.width * 100,
+          height: elementRect.height / planRect.height * 100
         };
       });
-      try { localStorage.setItem("clearline-bioreactor-positions", JSON.stringify(positions)); } catch (e) {}
+      try { localStorage.setItem("clearline-equipment-positions", JSON.stringify(positions)); } catch (e) {}
     }
 
     const resizableRooms = [...document.querySelectorAll(".resizable-room")];
@@ -2144,6 +2455,13 @@
         handle.dataset.direction = direction;
         room.appendChild(handle);
       });
+    });
+
+    equipmentEls.forEach(element => {
+      const handle = document.createElement("span");
+      handle.className = "equipment-resize-handle";
+      handle.setAttribute("aria-label", "Resize equipment");
+      element.appendChild(handle);
     });
 
     function readRoomGeometry(room) {
@@ -2167,12 +2485,12 @@
     function saveRoomLayout() {
       const layout = {};
       resizableRooms.forEach(room => { layout[room.dataset.roomKey] = readRoomGeometry(room); });
-      try { localStorage.setItem("clearline-room-layout-v2", JSON.stringify(layout)); } catch (e) {}
+      try { localStorage.setItem("clearline-room-layout-v3", JSON.stringify(layout)); } catch (e) {}
     }
 
     function loadRoomLayout() {
       try {
-        const layout = JSON.parse(localStorage.getItem("clearline-room-layout-v2"));
+        const layout = JSON.parse(localStorage.getItem("clearline-room-layout-v3"));
         if (!layout) return;
         resizableRooms.forEach(room => {
           if (layout[room.dataset.roomKey]) applyRoomGeometry(room, layout[room.dataset.roomKey]);
@@ -2233,10 +2551,12 @@
       });
     });
 
-    document.querySelectorAll('.equipment[data-id^="br-"]').forEach(element => {
+    equipmentEls.forEach(element => {
       let dragState = null;
       element.addEventListener("pointerdown", event => {
         if (event.button !== 0) return;
+        if (!document.getElementById("floorplan").classList.contains("equipment-editing")) return;
+        const resizeHandle = event.target.closest(".equipment-resize-handle");
         const plan = element.closest(".plan-layer");
         const planRect = plan.getBoundingClientRect();
         const elementRect = element.getBoundingClientRect();
@@ -2246,7 +2566,10 @@
           startY: event.clientY,
           startLeft: elementRect.left - planRect.left,
           startTop: elementRect.top - planRect.top,
+          startWidth: elementRect.width,
+          startHeight: elementRect.height,
           planRect,
+          mode: resizeHandle ? "resize" : "move",
           moved: false
         };
         element.setPointerCapture(event.pointerId);
@@ -2257,12 +2580,20 @@
         const dx = event.clientX - dragState.startX;
         const dy = event.clientY - dragState.startY;
         if (Math.abs(dx) + Math.abs(dy) > 4) dragState.moved = true;
-        const maxLeft = dragState.planRect.width - element.offsetWidth;
-        const maxTop = dragState.planRect.height - element.offsetHeight;
-        const left = Math.max(0, Math.min(maxLeft, dragState.startLeft + dx));
-        const top = Math.max(0, Math.min(maxTop, dragState.startTop + dy));
-        element.style.left = `${left / dragState.planRect.width * 100}%`;
-        element.style.top = `${top / dragState.planRect.height * 100}%`;
+        if (dragState.mode === "resize") {
+          const minSize = element.classList.contains("bag-station") ? 28 : 44;
+          const width = Math.max(minSize, Math.min(dragState.planRect.width - dragState.startLeft, dragState.startWidth + dx));
+          const height = Math.max(minSize, Math.min(dragState.planRect.height - dragState.startTop, dragState.startHeight + dy));
+          element.style.width = `${width / dragState.planRect.width * 100}%`;
+          element.style.height = `${height / dragState.planRect.height * 100}%`;
+        } else {
+          const maxLeft = dragState.planRect.width - element.offsetWidth;
+          const maxTop = dragState.planRect.height - element.offsetHeight;
+          const left = Math.max(0, Math.min(maxLeft, dragState.startLeft + dx));
+          const top = Math.max(0, Math.min(maxTop, dragState.startTop + dy));
+          element.style.left = `${left / dragState.planRect.width * 100}%`;
+          element.style.top = `${top / dragState.planRect.height * 100}%`;
+        }
       });
       element.addEventListener("pointerup", event => {
         if (!dragState || event.pointerId !== dragState.pointerId) return;
@@ -2270,10 +2601,10 @@
         dragState = null;
         element.classList.remove("dragging");
         if (moved) {
-          saveBioreactorPositions();
+          saveEquipmentPositions(element);
           element.dataset.justDragged = "true";
           setTimeout(() => delete element.dataset.justDragged, 0);
-          toast(`${assets[element.dataset.id].id} position saved`);
+          toast(`${assets[element.dataset.id].id} position and size saved`);
         }
       });
     });
@@ -2305,8 +2636,8 @@
       const days = ["Monday 15", "Tuesday 16", "Wednesday 17", "Thursday 18", "Friday 19"];
       const rooms = [
         { room: "Harvest Hold 1419", detail: "32 bag stations", operations: ["tak079", "tak079", "lana", "lana", "vpriv"] },
-        { room: "Bioreactor room", detail: "BR-01 · BR-02 · BR-03", operations: ["tak079", "lana", "vpriv", "repaf", "rhasac"] },
-        { room: "Zone 1202", detail: "3 process assets", operations: ["tak079", "lana", "lana", "vpriv", "vpriv"] },
+        { room: "Bioreactor room", detail: "BR-01 · BR-02 · BR-03 · BR-04 · BR-05", operations: ["tak079", "lana", "vpriv", "repaf", "rhasac"] },
+        { room: "Zone 1202", detail: "4 process assets", operations: ["tak079", "lana", "lana", "vpriv", "vpriv"] },
         { room: "Zone 1206", detail: "UF/DF + chromatography", operations: ["vpriv", "vpriv", "repaf", "repaf", "repaf"] },
         { room: "Zone 1502", detail: "Material staging", operations: ["rhasac", "tak079", "lana", "vpriv", "repaf"] },
         { room: "Zone 1507", detail: "Process utilities", operations: ["tak079", "lana", "vpriv", "repaf", "rhasac"] }
@@ -2328,8 +2659,8 @@
       document.getElementById("homeAlertCount").textContent = Object.values(assets).filter(asset => ["warning", "blocked", "offline", "cip-needed"].includes(asset.status)).length;
       const rooms = [
         ["Harvest Hold 1419", "32 bag stations", "All five products"],
-        ["Bioreactor room", "BR-01 · BR-02 · BR-03", "Campaign assignment"],
-        ["Zone 1202", "CHRM-2610 · SKID-2510 · TOT-2710", "TAK-079 · LANA · VPRIV"],
+        ["Bioreactor room", "BR-01 · BR-02 · BR-03 · BR-04 · BR-05", "Campaign assignment"],
+        ["Zone 1202", "CHRM-2610 · SKID-2510 · TOT-2710 · Column", "TAK-079 · LANA · VPRIV"],
         ["Zone 1206", "UF/DF-2601 · CHRM-2620", "VPRIV · RepAF"],
         ["Zone 1502", "Material staging", "Campaign support"],
         ["Zone 1507", "Process utilities", "Campaign support"]
@@ -2498,6 +2829,58 @@
       toast(`${asset.id} status updated to ${label}`);
     });
 
+    symbolSelect.addEventListener("change", () => {
+      const asset = assets[selectedId];
+      asset.symbol = symbolSelect.value;
+      asset.events.unshift([`Floorplan symbol changed to ${symbolSelect.options[symbolSelect.selectedIndex].text}`, `A. Nguyen · ${timeNow()} · Layout configuration`]);
+      persist();
+      updateMap();
+      renderTimeline();
+      toast(`${asset.id} symbol updated`);
+    });
+
+    function renameSelectedEquipment() {
+      if (selectedId.startsWith("hh-bs-")) return toast("Use the bag station rename control");
+      const input = document.getElementById("equipmentIdInput");
+      const newId = input.value.trim();
+      if (!newId) return toast("Enter an equipment or column ID");
+      const asset = assets[selectedId];
+      const oldId = asset.id;
+      asset.id = newId;
+      asset.events.unshift([`Equipment ID changed from ${oldId} to ${newId}`, `A. Nguyen · ${timeNow()} · Configuration update`]);
+      persist();
+      refreshEquipmentLabels();
+      renderAsset(selectedId);
+      updateEquipmentAssignmentSummary();
+      toast(`${oldId} renamed to ${newId}`);
+    }
+
+    document.getElementById("renameEquipment").addEventListener("click", renameSelectedEquipment);
+    document.getElementById("equipmentIdInput").addEventListener("keydown", event => {
+      if (event.key === "Enter") renameSelectedEquipment();
+    });
+
+    function addProcessStep() {
+      if (!supportsProcessSteps(selectedId)) return;
+      const input = document.getElementById("processStepInput");
+      const text = input.value.trim();
+      if (!text) return toast("Enter a process step");
+      const asset = assets[selectedId];
+      if (!Array.isArray(asset.processSteps)) asset.processSteps = defaultProcessSteps(selectedId);
+      asset.processSteps.push([text, false]);
+      asset.events.unshift([`Process step added: ${text}`, `A. Nguyen · ${timeNow()} · Configuration update`]);
+      input.value = "";
+      persist();
+      renderProcessSteps();
+      renderTimeline();
+      toast(`Process step added to ${asset.id}`);
+    }
+
+    document.getElementById("addProcessStep").addEventListener("click", addProcessStep);
+    document.getElementById("processStepInput").addEventListener("keydown", event => {
+      if (event.key === "Enter") addProcessStep();
+    });
+
     ["metric1", "metric2", "metric3", "metric4"].forEach((metricId, index) => {
       document.getElementById(metricId).addEventListener("change", event => {
         const asset = assets[selectedId];
@@ -2536,6 +2919,10 @@
 
     document.getElementById("editLayoutBtn").addEventListener("click", function() {
       const floorplan = document.getElementById("floorplan");
+      floorplan.classList.remove("equipment-editing");
+      const equipmentButton = document.getElementById("editEquipmentBtn");
+      equipmentButton.classList.remove("active");
+      equipmentButton.textContent = "Move equipment";
       const editing = floorplan.classList.toggle("layout-editing");
       this.classList.toggle("active", editing);
       this.textContent = editing ? "Done editing" : "Edit rooms";
@@ -2543,7 +2930,11 @@
     });
 
     document.getElementById("resetRoomsBtn").addEventListener("click", () => {
-      try { localStorage.removeItem("clearline-room-layout-v2"); } catch (e) {}
+      try {
+        localStorage.removeItem("clearline-room-layout");
+        localStorage.removeItem("clearline-room-layout-v2");
+        localStorage.removeItem("clearline-room-layout-v3");
+      } catch (e) {}
       resizableRooms.forEach(room => {
         room.style.removeProperty("left");
         room.style.removeProperty("top");
@@ -2551,6 +2942,26 @@
         room.style.removeProperty("height");
       });
       toast("Room layout reset");
+    });
+
+    document.getElementById("editEquipmentBtn").addEventListener("click", function() {
+      const floorplan = document.getElementById("floorplan");
+      floorplan.classList.remove("layout-editing");
+      const roomButton = document.getElementById("editLayoutBtn");
+      roomButton.classList.remove("active");
+      roomButton.textContent = "Edit rooms";
+      const editing = floorplan.classList.toggle("equipment-editing");
+      this.classList.toggle("active", editing);
+      this.textContent = editing ? "Done moving" : "Move equipment";
+      toast(editing ? "Drag any equipment to reposition it" : "Equipment positions saved");
+    });
+
+    document.getElementById("resetEquipmentBtn").addEventListener("click", () => {
+      try {
+        localStorage.removeItem("clearline-equipment-positions");
+        localStorage.removeItem("clearline-bioreactor-positions");
+      } catch (e) {}
+      window.location.reload();
     });
 
     function selectZone(roomId, announce = true) {
@@ -2588,8 +2999,9 @@
     loadSaved();
     loadBagStationNames();
     refreshBagStationLabels();
+    refreshEquipmentLabels();
     loadAssignments();
-    loadBioreactorPositions();
+    loadEquipmentPositions();
     loadRoomLayout();
     document.getElementById("auditEquipmentFilter").innerHTML += Object.entries(assets)
       .map(([id, asset]) => `<option value="${id}">${asset.id} · ${asset.name}</option>`)
