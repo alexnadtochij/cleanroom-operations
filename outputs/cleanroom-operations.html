@@ -330,6 +330,10 @@
       background: white;
       color: var(--muted);
     }
+    .assignment-btn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
     .assignment-summary {
       margin-top: 7px;
       color: var(--muted);
@@ -1234,6 +1238,7 @@
     .eq-17 { left: 31%; top: 79%; width: 72px; height: 72px; }
     .eq-18 { left: 43%; top: 79%; width: 72px; height: 72px; }
     .eq-19 { left: 37%; top: 24%; width: 76px; height: 76px; border-radius: 50%; }
+    .eq-custom { left: 42%; top: 42%; width: 92px; height: 68px; }
     .eq-6 { left: 34%; top: 40%; width: 130px; height: 78px; }
     .eq-7 { left: 42%; top: 40%; width: 130px; height: 78px; }
     .eq-8 { left: 58%; top: 40%; width: 116px; height: 78px; }
@@ -1566,8 +1571,40 @@
               <button class="assignment-btn" id="assignEquipment">Assign equipment</button>
               <button class="assignment-btn remove" id="removeEquipment">Remove</button>
             </div>
-            <div class="assignment-summary" id="equipmentAssignmentSummary">Select an operation and equipment asset.</div>
+          <div class="assignment-summary" id="equipmentAssignmentSummary">Select an operation and equipment asset.</div>
           </div>
+        </div>
+
+        <div class="assignment-panel">
+          <label>Add equipment to floorplan</label>
+          <div class="assignment-grid">
+            <input class="metric-input" id="newEquipmentId" placeholder="Equipment ID (optional)">
+            <input class="metric-input" id="newEquipmentName" placeholder="Equipment name">
+          </div>
+          <div class="assignment-grid">
+            <select id="newEquipmentRoom" aria-label="New equipment room">
+              <option value="wash">Zone 1202</option>
+              <option value="airlock">Zone 1206</option>
+              <option value="production">Harvest Hold 1419</option>
+              <option value="bioreactor">Bioreactor zone</option>
+              <option value="material">Zone 1502</option>
+              <option value="utility">Zone 1507</option>
+            </select>
+            <select id="newEquipmentSymbol" aria-label="New equipment symbol">
+              <option value="machine">Standard machine</option>
+              <option value="vessel">Vessel / tank</option>
+              <option value="skid">Process skid</option>
+              <option value="tote">Tote / container</option>
+              <option value="filter">Filter / UF-DF</option>
+              <option value="panel">Control panel</option>
+              <option value="scale">Scale</option>
+              <option value="column">Chromatography column</option>
+            </select>
+          </div>
+          <div class="assignment-actions">
+            <button class="assignment-btn" id="addEquipment">Add equipment</button>
+          </div>
+          <div class="assignment-summary" id="addEquipmentSummary">Pick a room and symbol, then add equipment. Leave ID blank to auto-number it.</div>
         </div>
 
         <div class="eyebrow nav-title">Six cleanroom zones</div>
@@ -1727,6 +1764,7 @@
             <div><label>Equipment status</label><select class="status-select" id="statusSelect"><option value="idle">Idle</option><option value="bag-installed">Bag installed</option><option value="in-use">In use</option><option value="warning">Attention</option><option value="blocked">Blocked</option><option value="offline">Offline</option></select></div>
             <div><label>Floorplan symbol</label><select class="status-select" id="symbolSelect"><option value="machine">Standard machine</option><option value="vessel">Vessel / bioreactor</option><option value="skid">Process skid</option><option value="tote">Tote / container</option><option value="filter">Filter / UF-DF</option><option value="panel">Control panel</option><option value="scale">Scale</option><option value="bag">Bag station</option><option value="column">Chromatography column</option></select></div>
             <div id="equipmentIdEditor"><label>Equipment / column ID</label><div class="assignment-actions"><input class="metric-input" id="equipmentIdInput" placeholder="Enter equipment ID"><button class="assignment-btn" id="renameEquipment">Rename</button></div></div>
+            <div><label>Equipment actions</label><button class="assignment-btn remove" id="deleteSelectedEquipment">Remove equipment</button></div>
           </div>
         </div>
 
@@ -1737,6 +1775,33 @@
             <div class="metric"><span id="metricLabel2">Net weight</span><input class="metric-input good" id="metric2" value="0.0 kg"></div>
             <div class="metric"><span id="metricLabel3">Bag ID</span><input class="metric-input" id="metric3" value="Not installed"></div>
             <div class="metric"><span id="metricLabel4">Hold time</span><input class="metric-input" id="metric4" value="--"></div>
+          </div>
+        </div>
+
+        <div class="section" id="columnParametersSection">
+          <div class="section-title"><b>Column parameters</b><span>Future block timing inputs</span></div>
+          <div class="assignment-grid">
+            <div>
+              <label>Column parameter</label>
+              <select class="status-select" id="columnParameterSelect">
+                <option value="height">Height</option>
+                <option value="diameter">Diameter</option>
+                <option value="cv">Column volume (CV)</option>
+              </select>
+            </div>
+            <div>
+              <label>Value</label>
+              <div class="assignment-actions">
+                <input class="metric-input" id="columnParameterValue" placeholder="Enter value">
+                <button class="assignment-btn" id="saveColumnParameter">Save</button>
+              </div>
+            </div>
+          </div>
+          <div class="metric-grid">
+            <div class="metric"><span>Height</span><b id="columnHeightReadout">--</b></div>
+            <div class="metric"><span>Diameter</span><b id="columnDiameterReadout">--</b></div>
+            <div class="metric"><span>Column volume (CV)</span><b id="columnCvReadout">--</b></div>
+            <div class="metric"><span>Units</span><b id="columnParameterUnit">cm</b></div>
           </div>
         </div>
 
@@ -1898,6 +1963,7 @@
         id: "COL-1202-01", name: "Chromatography column", room: "Zone 1202", status: "idle", disposition: "Released", symbol: "column",
         metricLabels: ["Column pressure", "Bed height", "Column volume", "Resin lot"],
         metrics: ["0.00 bar", "-- cm", "-- L", "Not assigned"],
+        columnParameters: { height: "", diameter: "", cv: "" },
         checklist: [["Column identity confirmed", false], ["Resin lot verified", false], ["Packing record available", false], ["Column released for use", false]],
         processSteps: [["Verify column identity", false], ["Connect column", false], ["Flush preservation solution", false], ["Equilibrate column", false], ["Run chromatography step", false], ["Store or unpack column", false]],
         events: [["Column added to Zone 1202", "System · just now"], ["Status set to Idle", "System · just now"]]
@@ -2029,14 +2095,81 @@
     const room1206ValidatedOperations = ["vpriv", "repaf"];
     const restrictedBagStations = ["hh-bs-31", "hh-bs-32"];
     const restrictedBagOperations = ["repaf", "rhasac"];
+    const roomMeta = {
+      wash: { plan: "main", room: "Zone 1202", left: 21, top: 36 },
+      airlock: { plan: "main", room: "Zone 1206", left: 68, top: 36 },
+      production: { plan: "production", room: "Harvest Hold 1419", left: 46, top: 34 },
+      bioreactor: { plan: "production", room: "Bioreactor room", left: 9, top: 68 },
+      material: { plan: "material", room: "Material staging", left: 42, top: 42 },
+      utility: { plan: "utility", room: "Process utilities", left: 42, top: 42 }
+    };
+
+    function customEquipmentDefaults(id, label, name, roomKey, symbol) {
+      const meta = roomMeta[roomKey] || roomMeta.wash;
+      const isColumn = symbol === "column";
+      return {
+        id: label,
+        name: name || (isColumn ? "Chromatography column" : "Custom equipment"),
+        room: meta.room,
+        status: "idle",
+        disposition: "Released",
+        symbol,
+        custom: true,
+        plan: meta.plan,
+        mapRoom: roomKey,
+        left: meta.left,
+        top: meta.top,
+        metricLabels: isColumn ? ["Column pressure", "Bed height", "Column volume", "Resin lot"] : ["Temperature", "Pressure", "Flow rate", "Next PM"],
+        metrics: isColumn ? ["0.00 bar", "-- cm", "-- L", "Not assigned"] : ["20.0 C", "0.00 bar", "0.0 L/min", "--"],
+        columnParameters: isColumn ? { height: "", diameter: "", cv: "" } : undefined,
+        checklist: isColumn ? [["Column identity confirmed", false], ["Resin lot verified", false], ["Packing record available", false], ["Column released for use", false]] : [["Equipment identity verified", false], ["Line clearance complete", false], ["Pre-use check complete", false], ["Released for operation", false]],
+        processSteps: isColumn ? defaultProcessSteps("column-1202") : defaultProcessSteps(id),
+        events: [["Equipment added to floorplan", `A. Nguyen · ${timeNow()}`], ["Status set to Idle", `A. Nguyen · ${timeNow()}`]]
+      };
+    }
+
+    function createEquipmentButton(id, asset) {
+      const plan = document.querySelector(`.plan-layer[data-plan="${asset.plan || roomMeta[asset.mapRoom]?.plan || "main"}"]`);
+      if (!plan || document.querySelector(`.equipment[data-id="${id}"]`)) return null;
+      const button = document.createElement("button");
+      button.className = `equipment eq-custom ${asset.status || "idle"}`;
+      button.dataset.id = id;
+      button.dataset.room = asset.mapRoom || "wash";
+      button.style.left = `${asset.left ?? roomMeta[button.dataset.room]?.left ?? 42}%`;
+      button.style.top = `${asset.top ?? roomMeta[button.dataset.room]?.top ?? 42}%`;
+      button.innerHTML = `<span class="machine-art"></span><span class="status-dot"></span><span class="equipment-label">${asset.id}</span>`;
+      plan.appendChild(button);
+      return button;
+    }
+
+    function saveCustomEquipmentDefinitions() {
+      const custom = {};
+      Object.entries(assets).forEach(([id, asset]) => {
+        if (asset.custom) custom[id] = asset;
+      });
+      try { localStorage.setItem("clearline-custom-equipment", JSON.stringify(custom)); } catch (e) {}
+    }
+
+    function loadCustomEquipmentDefinitions() {
+      try {
+        const custom = JSON.parse(localStorage.getItem("clearline-custom-equipment")) || {};
+        Object.entries(custom).forEach(([id, asset]) => {
+          assets[id] = asset;
+          createEquipmentButton(id, asset);
+        });
+      } catch (e) {}
+    }
 
     let selectedId = "hh-bs-01";
     let alertsOnly = false;
     let zoom = 1;
 
+    loadCustomEquipmentDefinitions();
     const equipmentEls = [...document.querySelectorAll(".equipment")];
     const statusSelect = document.getElementById("statusSelect");
     const symbolSelect = document.getElementById("symbolSelect");
+    const columnParameterSelect = document.getElementById("columnParameterSelect");
+    const columnParameterValue = document.getElementById("columnParameterValue");
     const phaseSelect = document.getElementById("phaseSelect");
     const phaseSelect2 = document.getElementById("phaseSelect2");
     const assignmentOperation = document.getElementById("assignmentOperation");
@@ -2198,10 +2331,26 @@
       if (assetId === "skid-2510") return "skid";
       if (assetId === "tot-2710") return "tote";
       if (assetId === "ufdf-2601") return "filter";
-      if (assetId === "column-1202") return "column";
+      if (assetId === "column-1202" || assets[assetId]?.symbol === "column") return "column";
       if (assetId === "ms-101") return "scale";
       if (assetId === "pw-402") return "panel";
       return "machine";
+    }
+
+    const columnParameterMeta = {
+      height: { label: "Height", unit: "cm" },
+      diameter: { label: "Diameter", unit: "cm" },
+      cv: { label: "Column volume (CV)", unit: "L" }
+    };
+
+    function isColumnEquipment(assetId) {
+      const asset = assets[assetId];
+      return assetId === "column-1202" || asset?.symbol === "column" || asset?.name?.toLowerCase().includes("column");
+    }
+
+    function ensureColumnParameters(asset) {
+      if (!asset.columnParameters) asset.columnParameters = { height: "", diameter: "", cv: "" };
+      return asset.columnParameters;
     }
 
     function supportsProcessSteps(assetId) {
@@ -2212,11 +2361,31 @@
       if (assetId === "ufdf-2601") return [["Install membrane cassette", false], ["Prime flow path", false], ["Run concentration step", false], ["Run diafiltration step", false], ["Recover product", false]];
       if (assetId === "skid-2510") return [["Configure flow path", false], ["Perform pre-use leak test", false], ["Prime skid", false], ["Run transfer", false], ["Drain and secure system", false]];
       if (assetId.startsWith("chrm-")) return [["Install column", false], ["Prime buffer paths", false], ["Equilibrate column", false], ["Load product", false], ["Wash and elute", false]];
-      if (assetId === "column-1202") return [["Verify column identity", false], ["Connect column", false], ["Flush preservation solution", false], ["Equilibrate column", false], ["Run chromatography step", false], ["Store or unpack column", false]];
+      if (assetId === "column-1202" || assets[assetId]?.symbol === "column") return [["Verify column identity", false], ["Connect column", false], ["Flush preservation solution", false], ["Equilibrate column", false], ["Run chromatography step", false], ["Store or unpack column", false]];
       if (assetId === "tot-2710") return [["Verify tote identity", false], ["Connect transfer line", false], ["Tare tote", false], ["Receive product", false], ["Disconnect and secure", false]];
       if (assetId.startsWith("br-")) return [["Prepare vessel", false], ["Calibrate probes", false], ["Charge media", false], ["Inoculate vessel", false], ["Run culture phase", false], ["Harvest batch", false]];
       if (assetId === "cip-401") return [["Select cleaning circuit", false], ["Pre-rinse", false], ["Caustic wash", false], ["Final rinse", false], ["Release cleaning cycle", false]];
       return [["Prepare equipment", false], ["Run operation", false], ["Complete post-use activities", false]];
+    }
+
+    function renderColumnParameters() {
+      const section = document.getElementById("columnParametersSection");
+      if (!isColumnEquipment(selectedId)) {
+        section.style.display = "none";
+        return;
+      }
+
+      const asset = assets[selectedId];
+      const params = ensureColumnParameters(asset);
+      const selectedParam = columnParameterSelect.value || "height";
+      const meta = columnParameterMeta[selectedParam];
+      section.style.display = "";
+      columnParameterValue.value = params[selectedParam] || "";
+      columnParameterValue.placeholder = `Enter ${meta.label.toLowerCase()}`;
+      document.getElementById("columnParameterUnit").textContent = meta.unit;
+      document.getElementById("columnHeightReadout").textContent = params.height ? `${params.height} cm` : "--";
+      document.getElementById("columnDiameterReadout").textContent = params.diameter ? `${params.diameter} cm` : "--";
+      document.getElementById("columnCvReadout").textContent = params.cv ? `${params.cv} L` : "--";
     }
 
     function renderAsset(id) {
@@ -2230,9 +2399,13 @@
       statusSelect.value = asset.status;
       symbolSelect.value = asset.symbol || defaultSymbol(id);
       document.getElementById("equipmentIdInput").value = asset.id;
+      const deleteEquipmentButton = document.getElementById("deleteSelectedEquipment");
+      deleteEquipmentButton.disabled = !asset.custom;
+      deleteEquipmentButton.textContent = asset.custom ? "Remove equipment" : "Built-in equipment";
       const metricLabels = asset.metricLabels || ["Temperature", "Pressure", "Calibration", "Next PM"];
       metricLabels.forEach((label, i) => document.getElementById(`metricLabel${i + 1}`).textContent = label);
       ["metric1","metric2","metric3","metric4"].forEach((metric, i) => document.getElementById(metric).value = asset.metrics[i]);
+      renderColumnParameters();
       const assignments = stationAssignments(id);
       document.getElementById("readinessSection").style.display = assignments.length ? "" : "none";
       document.getElementById("checklistTitle").textContent = `${assignments.map(operation => operationLabels[operation]).join(" / ")} readiness`;
@@ -2284,6 +2457,7 @@
           <span class="process-step-name">${step[0]}</span>
           <span class="process-step-actions">
             <button data-step-toggle="${index}">${step[1] ? "Reopen" : "Complete"}</button>
+            <button data-step-edit="${index}">Edit</button>
             <button data-step-remove="${index}">Remove</button>
           </span>
         </div>`).join("");
@@ -2291,6 +2465,19 @@
         const index = Number(button.dataset.stepToggle);
         asset.processSteps[index][1] = !asset.processSteps[index][1];
         asset.events.unshift([`Process step ${asset.processSteps[index][1] ? "completed" : "reopened"}: ${asset.processSteps[index][0]}`, `A. Nguyen · ${timeNow()}`]);
+        persist();
+        renderProcessSteps();
+        renderTimeline();
+      }));
+      document.querySelectorAll("[data-step-edit]").forEach(button => button.addEventListener("click", () => {
+        const index = Number(button.dataset.stepEdit);
+        const nextText = prompt("Edit process step", asset.processSteps[index][0]);
+        if (nextText === null) return;
+        const cleanText = nextText.trim();
+        if (!cleanText) return toast("Process step cannot be blank");
+        const oldText = asset.processSteps[index][0];
+        asset.processSteps[index][0] = cleanText;
+        asset.events.unshift([`Process step edited from "${oldText}" to "${cleanText}"`, `A. Nguyen · ${timeNow()} · Configuration update`]);
         persist();
         renderProcessSteps();
         renderTimeline();
@@ -2363,7 +2550,10 @@
     }
 
     function persist() {
-      try { localStorage.setItem("clearline-assets", JSON.stringify(assets)); } catch (e) {}
+      try {
+        localStorage.setItem("clearline-assets", JSON.stringify(assets));
+        saveCustomEquipmentDefinitions();
+      } catch (e) {}
     }
 
     function loadSaved() {
@@ -2445,6 +2635,14 @@
         };
       });
       try { localStorage.setItem("clearline-equipment-positions", JSON.stringify(positions)); } catch (e) {}
+    }
+
+    function removeEquipmentPosition(id) {
+      try {
+        const positions = JSON.parse(localStorage.getItem("clearline-equipment-positions")) || {};
+        delete positions[id];
+        localStorage.setItem("clearline-equipment-positions", JSON.stringify(positions));
+      } catch (e) {}
     }
 
     const resizableRooms = [...document.querySelectorAll(".resizable-room")];
@@ -2728,6 +2926,107 @@
         updateEquipmentAssignmentSummary();
       }
     }));
+
+    function addEquipmentDropdownOptions(id) {
+      if (equipmentAssignmentAsset.querySelector(`option[value="${id}"]`)) return;
+      const asset = assets[id];
+      equipmentAssignmentAsset.insertAdjacentHTML("beforeend", `<option value="${id}">${asset.id} · ${asset.name}</option>`);
+      document.getElementById("auditEquipmentFilter").insertAdjacentHTML("beforeend", `<option value="${id}">${asset.id} · ${asset.name}</option>`);
+    }
+
+    function nextEquipmentLabel(symbol) {
+      const prefixes = {
+        machine: "EQ",
+        vessel: "VES",
+        skid: "SKID",
+        tote: "TOT",
+        filter: "UFDF",
+        panel: "PNL",
+        scale: "SCL",
+        column: "COL"
+      };
+      const prefix = prefixes[symbol] || "EQ";
+      let index = 1;
+      let label = `${prefix}-${String(index).padStart(3, "0")}`;
+      const existingLabels = new Set(Object.values(assets).map(asset => asset.id));
+      while (existingLabels.has(label)) {
+        index += 1;
+        label = `${prefix}-${String(index).padStart(3, "0")}`;
+      }
+      return label;
+    }
+
+    function activateEquipmentElement(element) {
+      if (!element || equipmentEls.includes(element)) return;
+      const handle = document.createElement("span");
+      handle.className = "equipment-resize-handle";
+      handle.setAttribute("aria-label", "Resize equipment");
+      element.appendChild(handle);
+
+      let dragState = null;
+      element.addEventListener("pointerdown", event => {
+        if (event.button !== 0) return;
+        if (!document.getElementById("floorplan").classList.contains("equipment-editing")) return;
+        const resizeHandle = event.target.closest(".equipment-resize-handle");
+        const plan = element.closest(".plan-layer");
+        const planRect = plan.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+        dragState = {
+          pointerId: event.pointerId,
+          startX: event.clientX,
+          startY: event.clientY,
+          startLeft: elementRect.left - planRect.left,
+          startTop: elementRect.top - planRect.top,
+          startWidth: elementRect.width,
+          startHeight: elementRect.height,
+          planRect,
+          mode: resizeHandle ? "resize" : "move",
+          moved: false
+        };
+        element.setPointerCapture(event.pointerId);
+        element.classList.add("dragging");
+      });
+      element.addEventListener("pointermove", event => {
+        if (!dragState || event.pointerId !== dragState.pointerId) return;
+        const dx = event.clientX - dragState.startX;
+        const dy = event.clientY - dragState.startY;
+        if (Math.abs(dx) + Math.abs(dy) > 4) dragState.moved = true;
+        if (dragState.mode === "resize") {
+          const minSize = element.classList.contains("bag-station") ? 28 : 44;
+          const width = Math.max(minSize, Math.min(dragState.planRect.width - dragState.startLeft, dragState.startWidth + dx));
+          const height = Math.max(minSize, Math.min(dragState.planRect.height - dragState.startTop, dragState.startHeight + dy));
+          element.style.width = `${width / dragState.planRect.width * 100}%`;
+          element.style.height = `${height / dragState.planRect.height * 100}%`;
+        } else {
+          const maxLeft = dragState.planRect.width - element.offsetWidth;
+          const maxTop = dragState.planRect.height - element.offsetHeight;
+          const left = Math.max(0, Math.min(maxLeft, dragState.startLeft + dx));
+          const top = Math.max(0, Math.min(maxTop, dragState.startTop + dy));
+          element.style.left = `${left / dragState.planRect.width * 100}%`;
+          element.style.top = `${top / dragState.planRect.height * 100}%`;
+        }
+      });
+      element.addEventListener("pointerup", event => {
+        if (!dragState || event.pointerId !== dragState.pointerId) return;
+        const moved = dragState.moved;
+        dragState = null;
+        element.classList.remove("dragging");
+        if (moved) {
+          saveEquipmentPositions(element);
+          element.dataset.justDragged = "true";
+          setTimeout(() => delete element.dataset.justDragged, 0);
+          toast(`${assets[element.dataset.id].id} position and size saved`);
+        }
+      });
+      element.addEventListener("click", () => {
+        if (element.dataset.justDragged) return;
+        renderAsset(element.dataset.id);
+        equipmentAssignmentAsset.value = element.dataset.id;
+        updateEquipmentAssignmentSummary();
+      });
+      equipmentEls.push(element);
+    }
+
     phaseSelect.addEventListener("change", updatePhase);
     phaseSelect2.addEventListener("change", updatePhase);
     assignmentStation.addEventListener("change", updateAssignmentSummary);
@@ -2860,6 +3159,29 @@
       if (event.key === "Enter") renameSelectedEquipment();
     });
 
+    document.getElementById("deleteSelectedEquipment").addEventListener("click", () => {
+      const asset = assets[selectedId];
+      if (!asset?.custom) return toast("Only equipment added in the app can be removed");
+      const removedId = selectedId;
+      const removedLabel = asset.id;
+      Object.keys(phaseConfig).forEach(operation => {
+        phaseConfig[operation].required = phaseConfig[operation].required.filter(id => id !== removedId);
+      });
+      document.querySelector(`.equipment[data-id="${removedId}"]`)?.remove();
+      const index = equipmentEls.findIndex(element => element.dataset.id === removedId);
+      if (index >= 0) equipmentEls.splice(index, 1);
+      equipmentAssignmentAsset.querySelector(`option[value="${removedId}"]`)?.remove();
+      document.getElementById("auditEquipmentFilter").querySelector(`option[value="${removedId}"]`)?.remove();
+      delete assets[removedId];
+      removeEquipmentPosition(removedId);
+      saveAssignments();
+      persist();
+      updateMap();
+      renderAsset("hh-bs-01");
+      updateEquipmentAssignmentSummary();
+      toast(`${removedLabel} removed from floorplan`);
+    });
+
     function addProcessStep() {
       if (!supportsProcessSteps(selectedId)) return;
       const input = document.getElementById("processStepInput");
@@ -2881,6 +3203,35 @@
       if (event.key === "Enter") addProcessStep();
     });
 
+    document.getElementById("addEquipment").addEventListener("click", () => {
+      const idInput = document.getElementById("newEquipmentId");
+      const nameInput = document.getElementById("newEquipmentName");
+      const roomKey = document.getElementById("newEquipmentRoom").value;
+      const symbol = document.getElementById("newEquipmentSymbol").value;
+      const label = idInput.value.trim() || nextEquipmentLabel(symbol);
+      let internalId = `custom-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || Date.now()}`;
+      if (Object.values(assets).some(asset => asset.id.toLowerCase() === label.toLowerCase())) return toast("That equipment ID already exists");
+      if (assets[internalId]) internalId = `custom-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}-${Date.now()}`;
+      const asset = customEquipmentDefaults(internalId, label, nameInput.value.trim(), roomKey, symbol);
+      assets[internalId] = asset;
+      const button = createEquipmentButton(internalId, asset);
+      activateEquipmentElement(button);
+      addEquipmentDropdownOptions(internalId);
+      saveCustomEquipmentDefinitions();
+      persist();
+      updateMap();
+      const roomButton = document.querySelector(`.room-nav button[data-room="${roomKey}"]`);
+      if (roomButton) roomButton.click();
+      equipmentAssignmentAsset.value = internalId;
+      renderAsset(internalId);
+      updateEquipmentAssignmentSummary();
+      saveEquipmentPositions(button);
+      idInput.value = "";
+      nameInput.value = "";
+      document.getElementById("addEquipmentSummary").textContent = `${label} added to ${asset.room}. Use Edit equipment layout to move or resize it.`;
+      toast(`${label} added to ${asset.room}`);
+    });
+
     ["metric1", "metric2", "metric3", "metric4"].forEach((metricId, index) => {
       document.getElementById(metricId).addEventListener("change", event => {
         const asset = assets[selectedId];
@@ -2890,6 +3241,25 @@
         renderTimeline();
         toast(`${asset.id} parameter saved`);
       });
+    });
+
+    columnParameterSelect.addEventListener("change", renderColumnParameters);
+    document.getElementById("saveColumnParameter").addEventListener("click", () => {
+      if (!isColumnEquipment(selectedId)) return;
+      const asset = assets[selectedId];
+      const params = ensureColumnParameters(asset);
+      const key = columnParameterSelect.value;
+      const meta = columnParameterMeta[key];
+      const value = columnParameterValue.value.trim();
+      params[key] = value;
+      asset.events.unshift([`${meta.label} set to ${value || "--"} ${value ? meta.unit : ""}`.trim(), `A. Nguyen · ${timeNow()} · Column parameter`]);
+      persist();
+      renderColumnParameters();
+      renderTimeline();
+      toast(`${meta.label} saved`);
+    });
+    columnParameterValue.addEventListener("keydown", event => {
+      if (event.key === "Enter") document.getElementById("saveColumnParameter").click();
     });
 
     document.getElementById("saveNote").addEventListener("click", () => {
